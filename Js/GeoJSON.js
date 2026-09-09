@@ -9,6 +9,20 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Our GeoJSON geometry and property data
 // (Keep your map initialization and bindDataPopup function at the top)
 
+// Function to attach popups to each shape
+function bindDataPopup(feature, layer) {
+    if (feature.properties && feature.properties.barangay) {
+        var popupContent = `
+            <div style="font-family: sans-serif;">
+                <h3 style="margin: 0 0 5px 0; color: #1e293b;">Barangay ${feature.properties.barangay}</h3>
+                <p style="margin: 0 0 3px 0;"><b>Flood Risk:</b> ${feature.properties.floodRisk}</p>
+                <p style="margin: 0;"><b>Health Impact:</b> ${feature.properties.healthImpactScore}</p>
+            </div>
+        `;
+        layer.bindPopup(popupContent);
+    }
+}
+
 // Fetch the data from your PHP backend
 fetch('../controller/api.php')
     .then(response => response.json())
@@ -26,29 +40,3 @@ fetch('../controller/api.php')
         }).addTo(map);
     })
     .catch(error => console.error('Error fetching map data:', error));
-
-// Function to attach popups to each shape
-function bindDataPopup(feature, layer) {
-    if (feature.properties && feature.properties.barangay) {
-        var popupContent = `
-            <div style="font-family: sans-serif;">
-                <h3 style="margin: 0 0 5px 0; color: #1e293b;">Barangay ${feature.properties.barangay}</h3>
-                <p style="margin: 0 0 3px 0;"><b>Flood Risk:</b> ${feature.properties.floodRisk}</p>
-                <p style="margin: 0;"><b>Health Impact:</b> ${feature.properties.healthImpactScore}</p>
-            </div>
-        `;
-        layer.bindPopup(popupContent);
-    }
-}
-
-// Inject the data, color it, and attach popups
-L.geoJSON(geojsonData, {
-    style: function(feature) {
-        return {
-            color: feature.properties.floodRisk === 'High' ? '#ef4444' : '#f59e0b',
-            weight: 2,
-            fillOpacity: 0.5
-        };
-    },
-    onEachFeature: bindDataPopup
-}).addTo(map);

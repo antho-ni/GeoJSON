@@ -14,16 +14,22 @@ if ($conn->connect_error) {
 
 // Check if the form was actually submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+
     // Grab the data from the form
     $barangay = $_POST['barangay_name'];
     $risk = $_POST['flood_risk'];
     $score = $_POST['health_impact_score'];
     $coords = $_POST['polygon_coordinates'];
 
+    // Validate coordinates format
+    $coordsData = json_decode($coords, true);
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($coordsData) || empty($coordsData)) {
+        die("Invalid polygon coordinates format");
+    }
+
     // Prepare the SQL statement for secure insertion
     $stmt = $conn->prepare("INSERT INTO community_health_reports (barangay_name, flood_risk, health_impact_score, polygon_coordinates) VALUES (?, ?, ?, ?)");
-    
+
     // Bind the variables to the statement (s = string, d = double/decimal)
     $stmt->bind_param("ssds", $barangay, $risk, $score, $coords);
 
