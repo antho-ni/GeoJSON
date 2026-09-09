@@ -7,35 +7,25 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Our GeoJSON geometry and property data
-var geojsonData = {
-    "type": "FeatureCollection",
-    "features": [
-        {
-            "type": "Feature",
-            "properties": {
-                "barangay": "Mandalagan",
-                "floodRisk": "High",
-                "healthImpactScore": 3.80
+// (Keep your map initialization and bindDataPopup function at the top)
+
+// Fetch the data from your PHP backend
+fetch('../controller/api.php')
+    .then(response => response.json())
+    .then(data => {
+        // Once the data arrives, inject it into the map
+        L.geoJSON(data, {
+            style: function(feature) {
+                return {
+                    color: feature.properties.floodRisk === 'High' ? '#ef4444' : '#f59e0b',
+                    weight: 2,
+                    fillOpacity: 0.5
+                };
             },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [[[122.95, 10.69], [122.96, 10.69], [122.96, 10.68], [122.95, 10.68]]]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "barangay": "Tangub",
-                "floodRisk": "Moderate",
-                "healthImpactScore": 3.33
-            },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [[[122.93, 10.64], [122.94, 10.64], [122.94, 10.63], [122.93, 10.63]]]
-            }
-        }
-    ]
-};
+            onEachFeature: bindDataPopup
+        }).addTo(map);
+    })
+    .catch(error => console.error('Error fetching map data:', error));
 
 // Function to attach popups to each shape
 function bindDataPopup(feature, layer) {
