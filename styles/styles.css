@@ -1,0 +1,22 @@
+body { 
+    margin: 0; 
+    padding: 20px; 
+    font-family: sans-serif; 
+    background-color: #f4f4f9; 
+}
+
+.map-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#myMap {
+    height: 600px;
+    width: 100%;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+}
