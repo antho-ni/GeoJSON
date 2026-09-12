@@ -24,7 +24,7 @@ function bindDataPopup(feature, layer) {
 }
 
 // Fetch the data from your PHP backend
-fetch('../controller/api.php')
+fetch('controller/api.php')
     .then(response => response.json())
     .then(data => {
         // Once the data arrives, inject it into the map

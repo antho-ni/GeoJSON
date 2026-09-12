@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Community Data</title>
     <link rel="stylesheet" href="../../styles/admin.css">
+    <!-- Leaflet core CSS is required for tile and control positioning. -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Leaflet.draw CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@0.4.15/dist/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
 </head>
 <body>
     <div class="form-container">
         <h2>Log New Risk Zone</h2>
-        <div id="map" style="height: 400px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #ddd;"></div>
+        <div id="map" class="admin-map"></div>
         <form action="../../controller/submit.php" method="POST" id="dataForm">
             <label>Barangay Name:</label>
             <input type="text" name="barangay_name" required placeholder="e.g., Singcang-Airport">
@@ -22,7 +26,7 @@
             </select>
 
             <label>Health Impact Score (0.00 - 5.00):</label>
-            <input type="number" step="0.01" name="health_impact_score" required>
+            <input type="number" step="0.01" min="0" max="5" name="health_impact_score" required>
 
             <label>Polygon Coordinates (JSON Array):</label>
             <textarea name="polygon_coordinates" id="coordinates" rows="4" required placeholder="Draw a polygon on the map above to auto-fill coordinates"></textarea>
@@ -36,7 +40,7 @@
 
     <!-- Leaflet and Leaflet.draw JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-draw@0.4.15/dist/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
     <script>
         // Initialize map
         var map = L.map('map').setView([10.65, 122.95], 12);

@@ -12,12 +12,21 @@ $pass = '';
 $conn = new mysqli($host, $user, $pass, $db);
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    http_response_code(500);
+    echo json_encode(array('error' => 'Unable to connect to the database.'));
+    exit;
 }
 
 // Query the data
 $sql = "SELECT barangay_name, flood_risk, health_impact_score, polygon_coordinates FROM community_health_reports";
 $result = $conn->query($sql);
+
+if (!$result) {
+    http_response_code(500);
+    echo json_encode(array('error' => 'Unable to load community reports.'));
+    $conn->close();
+    exit;
+}
 
 // Set up the base GeoJSON structure
 $geojson = array(
@@ -27,7 +36,13 @@ $geojson = array(
 
 // Loop through the database rows and format them
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
+        $coordinates = json_decode($row['polygon_coordinates'], true);
+
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($coordinates)) {
+            continue;
+        }
+
         $feature = array(
             'type' => 'Feature',
             'properties' => array(
@@ -38,7 +53,7 @@ if ($result->num_rows > 0) {
             'geometry' => array(
                 'type' => 'Polygon',
                 // Decode the JSON string stored in the database back into a PHP array
-                'coordinates' => json_decode($row['polygon_coordinates'])
+                'coordinates' => $coordinates
             )
         );
         // Add this feature to the main array

@@ -20,3 +20,63 @@ body {
     border: 2px solid #e2e8f0;
     border-radius: 6px;
 }
+
+.map-legend {
+    position: absolute;
+    left: 30px;
+    bottom: 30px;
+    z-index: 1000;
+    padding: 12px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.map-legend h4 {
+    margin: 0 0 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.legend-swatch {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+.legend-swatch-high {
+    background: #ef4444;
+}
+
+.legend-swatch-other {
+    background: #f59e0b;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .map-container {
+        padding: 10px;
+    }
+
+    .map-container h2 {
+        font-size: 1.25rem;
+    }
+
+    #myMap {
+        height: 70vh;
+        min-height: 400px;
+    }
+
+    .map-legend {
+        left: 20px;
+        bottom: 20px;
+    }
+}
