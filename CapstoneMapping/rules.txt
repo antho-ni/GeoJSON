@@ -1,0 +1,53 @@
+https://docs.google.com/document/d/1DuJinej2XoVvvaD7xpGlqvgTVey5xXZgOSh8ZFAqt94/edit?usp=sharing
+
+📋 Front-End Making Checklist
+
+[ ] 1. CSS File Naming Convention: 
+    Name your custom CSS file following the [page title]-[feature/component].css pattern 
+        (e.g., homepage-stockpile.css, homepage-profiling.css, dashboard-incident-tickets.css).
+
+[ ] 2. Work strictly inside .component-view. Only work in component-view class:
+    Place all your HTML structure inside your designated section wrapper
+        (e.g., <section class="component-view" id="profiling-section"> </section>).
+
+[ ] 3. Do NOT edit styles.css:
+    Keep the main styles.css file completely untouched to prevent global layout breaks
+        (e.g., do NOT add, edit, or delete any lines inside styles.css).
+
+[ ] 4. Do NOT work outside .component-view:
+    Avoid writing or modifying any HTML elements outside the target component container
+        (e.g., do NOT edit #view-container, .sidebar, .top-bar, or .app-container).
+
+[ ] 5. Create a separate CSS file:
+    Save your custom component styles in a dedicated, separate CSS file instead of mixing them into the main file
+        (e.g., create table-template.css or profiling-card.css and link it via <link rel="stylesheet" href="...">).
+
+[ ] 6. Study and Use CSS Descendant Selectors:
+    Scope every CSS rule with .component-view first to avoid class name conflicts
+        (e.g., use .component-view .tbl-card { background: #fff; } instead of .tbl-card { background: #fff; }).
+
+[ ] 7. Make it "Populate-Ready" for PHP Backend:
+    Structure your HTML tables and forms so backend developers can easily loop database records or handle inputs
+        (e.g., add clear comment tags like `` around <tr> elements and use standard form inputs like <input name="resident_name">).
+
+
+[ ] 8. Use Simple JS Only. Avoid Complicated JS Code for Frontend:
+    Keep JavaScript lightweight for basic UI actions and avoid complex frameworks or heavy dynamic DOM generation
+        (e.g., use element.addEventListener('click', ...) for opening modals or toggling tabs, avoiding React, Vue, jQuery, or complex string concatenations).
+
+[ ] 9. Keep It Simple & Reusable:
+    Stick to clean, simple HTML layout structures and reuse generic utility classes where possible
+        (e.g., use predefined classes like .tbl-badge, .status-badge, .btn-tbl-primary instead of reinventing new styling classes).
+
+
+[ ] 10. Standardize System Typography & Fonts:
+    Always use the system's standard font stack ('Segoe UI', Tahoma, Geneva, Verdana, sans-serif) for all text elements inside your component to maintain consistent UI styling across modules
+        (e.g., do NOT use custom Google Fonts like 'Roboto' or 'Poppins' in your custom CSS file; let it inherit or set `font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;`).
+
+        Sample Code: 
+           
+            /* Standard for styles.css and component CSS files */
+            
+            * {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }

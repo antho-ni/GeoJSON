@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Stat Cards / Summary Boxes Component (Scoped inside .component-view)
+   ========================================================================== */
+
+/* Responsive Grid Container for Cards */
+.component-view .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Individual Card Architecture */
+.component-view .stat-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.component-view .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Top Section of Card (Label & Optional Badge/Icon) */
+.component-view .stat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.component-view .stat-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Main Numeric Value / Count */
+.component-view .stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+    margin-bottom: 6px;
+}
+
+/* Sub-text / Trend / Footer Indicator */
+.component-view .stat-footer {
+    font-size: 12px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.component-view .stat-trend {
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.component-view .stat-trend.positive {
+    color: #166534;
+}
+
+.component-view .stat-trend.negative {
+    color: #991b1b;
+}
+
+.component-view .stat-trend.neutral {
+    color: #475569;
+}
+
+
+
+/* ==========================================================================
+   Icon / Logo Styling for Stat Cards (Scoped inside .component-view)
+   ========================================================================== */
+
+/* Header flex container ensures title stays left, icon stays right */
+.component-view .stat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+/* Icon Container Badge */
+.component-view .stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background-color: #f1f5f9; /* Subtle light background */
+    color: #475569;            /* Icon color */
+    flex-shrink: 0;            /* Prevents icon from squishing */
+}
+
+/* If using <img> instead of SVG */
+.component-view .stat-logo-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}

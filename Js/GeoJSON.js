@@ -1,5 +1,5 @@
-// Initialize map
-var map = L.map('myMap').setView([10.65, 122.95], 12);
+var mapElement = document.getElementById('myMap');
+var map = L.map(mapElement).setView([10.65, 122.95], 12);
 
 // Load the street map visual tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -24,7 +24,7 @@ function bindDataPopup(feature, layer) {
 }
 
 // Fetch the data from your PHP backend
-fetch('controller/api.php')
+fetch(mapElement.dataset.apiUrl || 'controller/api.php')
     .then(response => response.json())
     .then(data => {
         // Once the data arrives, inject it into the map
@@ -38,5 +38,15 @@ fetch('controller/api.php')
             },
             onEachFeature: bindDataPopup
         }).addTo(map);
+        var mapStatus = document.getElementById('map-status');
+        if (mapStatus) {
+            mapStatus.textContent = data.features.length + ' community report(s) loaded.';
+        }
     })
-    .catch(error => console.error('Error fetching map data:', error));
+    .catch(error => {
+        var mapStatus = document.getElementById('map-status');
+        if (mapStatus) {
+            mapStatus.textContent = 'Unable to load community reports.';
+        }
+        console.error('Error fetching map data:', error);
+    });
