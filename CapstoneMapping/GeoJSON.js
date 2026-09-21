@@ -10,20 +10,52 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var floodLayer1 = L.layerGroup();
 var floodLayer2 = L.layerGroup();
 var communityLayer = L.layerGroup().addTo(map);
-var floodBounds = L.latLngBounds();
-var loadedFloodLayers = 0;
 var floodRenderer = L.canvas({ padding: 0.5 });
+var floodLayerState = {
+    flood1: { loaded: false, loading: false },
+    flood2: { loaded: false, loading: false }
+};
 
 function showFloodData(data, layerGroup, styleOptions) {
     var layer = L.geoJSON(data, styleOptions);
     layer.addTo(layerGroup);
     layerGroup.addTo(map);
-    floodBounds.extend(layer.getBounds());
-    loadedFloodLayers += 1;
+}
 
-    if (loadedFloodLayers === 2 && floodBounds.isValid()) {
-        map.fitBounds(floodBounds, { padding: [20, 20] });
+function loadFloodLayer(filePath, layerGroup, styleOptions, stateKey) {
+    var state = floodLayerState[stateKey];
+    if (state.loaded || state.loading) {
+        return;
     }
+
+    state.loading = true;
+    var mapStatus = document.getElementById('map-status');
+    if (mapStatus) {
+        mapStatus.textContent = 'Loading flood layer...';
+    }
+
+    fetch(filePath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            showFloodData(data, layerGroup, styleOptions);
+            state.loaded = true;
+            state.loading = false;
+            if (mapStatus) {
+                mapStatus.textContent = 'Flood layer loaded.';
+            }
+        })
+        .catch(error => {
+            state.loading = false;
+            if (mapStatus) {
+                mapStatus.textContent = 'Unable to load the flood layer.';
+            }
+            console.error('Error loading ' + filePath + ':', error);
+        });
 }
 
 // Function to get color based on hazard level
@@ -73,46 +105,30 @@ function bindCommunityPopup(feature, layer) {
     }
 }
 
-// Load Flood 1 GeoJSON
-fetch('../Js/flood1.geojson')
-    .then(response => response.json())
-    .then(data => {
-        showFloodData(data, floodLayer1, {
+var flood1Options = {
+    style: function(feature) {
+        return {
             renderer: floodRenderer,
-            smoothFactor: 1.5,
-            style: function(feature) {
-                return {
-                    renderer: floodRenderer,
-                    color: getHazardColor(getHazardLevel(feature)),
-                    weight: 1,
-                    fillOpacity: 0.4
-                };
-            },
-            onEachFeature: bindFloodPopup
-        });
-    })
-    .catch(error => console.error('Error loading flood1.geojson:', error));
+            color: getHazardColor(getHazardLevel(feature)),
+            weight: 1,
+            fillOpacity: 0.4
+        };
+    },
+    onEachFeature: bindFloodPopup
+};
 
-// Load Flood 2 GeoJSON
-fetch('../Js/flood2.geojson')
-    .then(response => response.json())
-    .then(data => {
-        showFloodData(data, floodLayer2, {
+var flood2Options = {
+    style: function(feature) {
+        return {
             renderer: floodRenderer,
-            smoothFactor: 1.5,
-            style: function(feature) {
-                return {
-                    renderer: floodRenderer,
-                    color: getHazardColor(getHazardLevel(feature)),
-                    weight: 1,
-                    fillOpacity: 0.3,
-                    dashArray: '5, 5'
-                };
-            },
-            onEachFeature: bindFloodPopup
-        });
-    })
-    .catch(error => console.error('Error loading flood2.geojson:', error));
+            color: getHazardColor(getHazardLevel(feature)),
+            weight: 1,
+            fillOpacity: 0.3,
+            dashArray: '5, 5'
+        };
+    },
+    onEachFeature: bindFloodPopup
+};
 
 // Fetch the data from your PHP backend
 fetch(mapElement.dataset.apiUrl || 'controller/api.php')
@@ -150,3 +166,12 @@ var overlayLayers = {
     'Storm Surge Forecast 2': floodLayer2
 };
 L.control.layers(baseLayers, overlayLayers, { position: 'topright' }).addTo(map);
+
+map.on('overlayadd', function(event) {
+    if (event.layer === floodLayer1) {
+        loadFloodLayer('../Js/flood1.geojson', floodLayer1, flood1Options, 'flood1');
+    }
+    if (event.layer === floodLayer2) {
+        loadFloodLayer('../Js/flood2.geojson', floodLayer2, flood2Options, 'flood2');
+    }
+});
