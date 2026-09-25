@@ -1,4 +1,9 @@
 var mapElement = document.getElementById('myMap');
+if (!mapElement) {
+    console.error('Map container #myMap not found.');
+} else if (typeof L === 'undefined') {
+    console.error('Leaflet is not loaded.');
+} else {
 var map = L.map(mapElement, {
     preferCanvas: true,
     zoomAnimation: false,
@@ -183,3 +188,5 @@ map.on('overlayadd', function(event) {
         loadFloodLayer('Js/flood2.json', floodLayer2, flood2Options, 'flood2');
     }
 });
+
+}
