@@ -1,0 +1,85 @@
+.component-view .map-component {
+    color: #334155;
+}
+
+.component-view .map-component-header {
+    align-items: flex-start;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.component-view .map-component-title {
+    color: #1e293b;
+    font-size: 20px;
+    margin: 0 0 6px;
+}
+
+.component-view .map-component-description {
+    color: #64748b;
+    font-size: 14px;
+    margin: 0;
+}
+
+.component-view .capstone-map {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    height: min(60vh, 560px);
+    min-height: 360px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.component-view .map-legend {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.component-view .map-legend-item {
+    align-items: center;
+    color: #475569;
+    display: inline-flex;
+    font-size: 12px;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.component-view .map-legend-swatch {
+    border-radius: 2px;
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+}
+
+.component-view .map-legend-high {
+    background: #ef4444;
+}
+
+.component-view .map-legend-other {
+    background: #f59e0b;
+}
+
+.component-view .map-status {
+    color: #64748b;
+    font-size: 13px;
+    margin: 10px 0 0;
+}
+
+@media (max-width: 720px) {
+    .component-view .map-component-header {
+        flex-direction: column;
+    }
+
+    .component-view .map-legend {
+        justify-content: flex-start;
+    }
+
+    .component-view .capstone-map {
+        height: 55vh;
+        min-height: 300px;
+    }
+}
